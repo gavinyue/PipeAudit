@@ -1,2 +1,3 @@
-// ClickHouse client module
-// Implementation will be added in PR-04
+mod client;
+
+pub use client::ChClient;
