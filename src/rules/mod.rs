@@ -1,2 +1,5 @@
-// Rules module - finding and action generation
-// Implementation will be added in PR-14 to PR-19
+mod context;
+mod engine;
+
+pub use context::AuditContext;
+pub use engine::{Rule, RuleRegistry, RuleResult};
