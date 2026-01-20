@@ -45,6 +45,49 @@ jobs:
       - name: Run tests
         run: cargo test
 
+  integration:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    services:
+      clickhouse:
+        image: clickhouse/clickhouse-server:24.1
+        ports:
+          - 8123:8123
+          - 9000:9000
+        options: >-
+          --health-cmd "clickhouse-client --query 'SELECT 1'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+        env:
+          CLICKHOUSE_USER: default
+          CLICKHOUSE_PASSWORD: test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo registry
+        uses: Swatinem/rust-cache@v2
+
+      - name: Wait for ClickHouse
+        run: |
+          until curl -s http://localhost:8123/ping; do
+            echo "Waiting for ClickHouse..."
+            sleep 2
+          done
+          echo "ClickHouse is ready"
+
+      - name: Setup test database
+        run: |
+          curl -s http://localhost:8123 \
+            --user default:test \
+            --data-binary @tests/fixtures/init.sql
+
+      - name: Run integration tests
+        run: cargo test --test integration_test -- --ignored
+
   build:
     name: Build
     runs-on: ubuntu-latest
