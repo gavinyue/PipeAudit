@@ -1,2 +1,5 @@
-// Output module - JSON and summary output
-// Implementation will be added in PR-22 and PR-23
+mod json;
+mod summary;
+
+pub use json::write_report;
+pub use summary::print_summary;
