@@ -74,8 +74,8 @@ impl MvDagCollector {
         Ok(Self::build_dag(database, tables, deps))
     }
 
-    /// Build DAG from raw data
-    pub fn build_dag(
+    /// Build DAG from raw data (internal use and testing)
+    fn build_dag(
         database: &str,
         tables: Vec<TableRow>,
         dependencies: Vec<DependencyRow>,
@@ -88,7 +88,10 @@ impl MvDagCollector {
             let key = format!("{}.{}", dep.database, dep.name);
             let dep_key = format!("{}.{}", dep.dep_database, dep.dep_table);
 
-            depends_on.entry(key.clone()).or_default().push(dep_key.clone());
+            depends_on
+                .entry(key.clone())
+                .or_default()
+                .push(dep_key.clone());
             depended_by.entry(dep_key).or_default().push(key);
         }
 
@@ -166,11 +169,7 @@ impl MvDagCollector {
                     continue;
                 }
 
-                let max_dep_depth = deps
-                    .iter()
-                    .filter_map(|d| depths.get(d))
-                    .max()
-                    .copied();
+                let max_dep_depth = deps.iter().filter_map(|d| depths.get(d)).max().copied();
 
                 if let Some(max_d) = max_dep_depth {
                     let new_depth = max_d + 1;

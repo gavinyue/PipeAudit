@@ -1,5 +1,5 @@
-use crate::report::{Action, ActionType, Finding, Priority, Severity};
 use super::{AuditContext, Rule, RuleResult};
+use crate::report::{Action, ActionType, Finding, Priority, Severity};
 
 const MERGE_QUEUE_WARNING: u64 = 10;
 const MERGE_ELAPSED_WARNING_SEC: f64 = 3600.0; // 1 hour

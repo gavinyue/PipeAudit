@@ -1,5 +1,5 @@
-use crate::report::{Action, ActionType, Finding, Priority, Severity};
 use super::{AuditContext, Rule, RuleResult};
+use crate::report::{Action, ActionType, Finding, Priority, Severity};
 
 const DISK_WARNING_PCT: f64 = 20.0;
 const DISK_CRITICAL_PCT: f64 = 10.0;

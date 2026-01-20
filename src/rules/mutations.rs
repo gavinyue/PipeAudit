@@ -1,5 +1,5 @@
-use crate::report::{Action, ActionType, Finding, Priority, Severity};
 use super::{AuditContext, Rule, RuleResult};
+use crate::report::{Action, ActionType, Finding, Priority, Severity};
 
 const MUTATION_STUCK_SEC: u64 = 3600; // 1 hour
 
@@ -113,6 +113,10 @@ mod tests {
         let ctx = ctx_with_mutations(1, Some(7200));
         let results = rule.evaluate(&ctx);
         assert!(results[0].actions[0].sql.is_some());
-        assert!(results[0].actions[0].sql.as_ref().unwrap().contains("system.mutations"));
+        assert!(results[0].actions[0]
+            .sql
+            .as_ref()
+            .unwrap()
+            .contains("system.mutations"));
     }
 }

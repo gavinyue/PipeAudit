@@ -37,10 +37,16 @@ async fn test_parts_collector() -> Result<()> {
 
     let metrics = PartsCollector::collect(&client, DATABASE, &tables).await?;
 
-    assert!(!metrics.is_empty(), "Should have parts metrics for events table");
+    assert!(
+        !metrics.is_empty(),
+        "Should have parts metrics for events table"
+    );
 
     // Find the events table metrics
-    let parts = metrics.iter().find(|m| m.table == "events").expect("Should have events metrics");
+    let parts = metrics
+        .iter()
+        .find(|m| m.table == "events")
+        .expect("Should have events metrics");
 
     assert!(parts.parts_count > 0, "Events table should have parts");
     assert!(parts.total_rows > 0, "Events table should have rows");
@@ -88,8 +94,14 @@ async fn test_disk_collector() -> Result<()> {
     assert!(!metrics.is_empty(), "Should have disk metrics");
 
     // Default disk should exist
-    let default_disk = metrics.iter().find(|d| d.disk_name == "default").expect("Should have default disk");
-    assert!(default_disk.total_space > 0, "Default disk should have total bytes");
+    let default_disk = metrics
+        .iter()
+        .find(|d| d.disk_name == "default")
+        .expect("Should have default disk");
+    assert!(
+        default_disk.total_space > 0,
+        "Default disk should have total bytes"
+    );
 
     Ok(())
 }
@@ -174,7 +186,10 @@ async fn test_full_audit_flow() -> Result<()> {
 
     // 5. Verify report structure
     assert!(!report.report_id.is_empty(), "Report should have ID");
-    assert!(!report.generated_at.is_empty(), "Report should have timestamp");
+    assert!(
+        !report.generated_at.is_empty(),
+        "Report should have timestamp"
+    );
     assert_eq!(report.targets.database, DATABASE);
     assert!(!report.evidence.is_empty(), "Report should have evidence");
 
@@ -226,8 +241,7 @@ async fn test_healthy_table_no_critical_findings() -> Result<()> {
 
     // Healthy table should not have critical findings for parts explosion
     let has_parts_critical = report.findings.iter().any(|f| {
-        f.rule_id == "parts_explosion"
-            && f.severity == pipeaudit::report::Severity::Critical
+        f.rule_id == "parts_explosion" && f.severity == pipeaudit::report::Severity::Critical
     });
 
     assert!(

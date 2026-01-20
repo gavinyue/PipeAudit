@@ -1,5 +1,5 @@
-use crate::report::{Action, Finding};
 use super::context::AuditContext;
+use crate::report::{Action, Finding};
 
 /// Result of a rule evaluation
 #[derive(Debug)]
@@ -110,7 +110,9 @@ mod tests {
     #[test]
     fn test_registry_register() {
         let mut registry = RuleRegistry::new();
-        registry.register(Box::new(MockRule { should_trigger: false }));
+        registry.register(Box::new(MockRule {
+            should_trigger: false,
+        }));
 
         assert!(!registry.is_empty());
         assert_eq!(registry.len(), 1);
@@ -128,7 +130,9 @@ mod tests {
     #[test]
     fn test_registry_evaluate_no_trigger() {
         let mut registry = RuleRegistry::new();
-        registry.register(Box::new(MockRule { should_trigger: false }));
+        registry.register(Box::new(MockRule {
+            should_trigger: false,
+        }));
 
         let ctx = AuditContext::new();
         let results = registry.evaluate_all(&ctx);
@@ -139,7 +143,9 @@ mod tests {
     #[test]
     fn test_registry_evaluate_trigger() {
         let mut registry = RuleRegistry::new();
-        registry.register(Box::new(MockRule { should_trigger: true }));
+        registry.register(Box::new(MockRule {
+            should_trigger: true,
+        }));
 
         let ctx = AuditContext::new();
         let results = registry.evaluate_all(&ctx);
@@ -151,8 +157,12 @@ mod tests {
     #[test]
     fn test_registry_multiple_rules() {
         let mut registry = RuleRegistry::new();
-        registry.register(Box::new(MockRule { should_trigger: true }));
-        registry.register(Box::new(MockRule { should_trigger: true }));
+        registry.register(Box::new(MockRule {
+            should_trigger: true,
+        }));
+        registry.register(Box::new(MockRule {
+            should_trigger: true,
+        }));
 
         let ctx = AuditContext::new();
         let results = registry.evaluate_all(&ctx);
@@ -163,7 +173,9 @@ mod tests {
     #[test]
     fn test_registry_rule_ids() {
         let mut registry = RuleRegistry::new();
-        registry.register(Box::new(MockRule { should_trigger: false }));
+        registry.register(Box::new(MockRule {
+            should_trigger: false,
+        }));
 
         let ids = registry.rule_ids();
         assert_eq!(ids, vec!["mock_rule"]);

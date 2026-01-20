@@ -1,5 +1,5 @@
-use crate::report::{Action, ActionType, Finding, Priority, Severity};
 use super::{AuditContext, Rule, RuleResult};
+use crate::report::{Action, ActionType, Finding, Priority, Severity};
 
 const READ_AMP_WARNING: f64 = 100.0;
 const READ_AMP_CRITICAL: f64 = 1000.0;
