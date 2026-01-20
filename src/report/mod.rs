@@ -1,2 +1,3 @@
-// Report module - report data structures
-// Implementation will be added in PR-07
+mod types;
+
+pub use types::*;
