@@ -100,7 +100,11 @@ mod tests {
     fn test_parts_query_multiple_tables() {
         let sql = PartsCollector::build_query(
             "testdb",
-            &["events".to_string(), "users".to_string(), "orders".to_string()],
+            &[
+                "events".to_string(),
+                "users".to_string(),
+                "orders".to_string(),
+            ],
         );
 
         assert!(sql.contains("'events'"));

@@ -1,6 +1,6 @@
 use super::types::*;
 use crate::collectors::EvidenceCollector;
-use crate::rules::{AuditContext, RuleRegistry, RuleResult};
+use crate::rules::{AuditContext, RuleRegistry};
 use std::collections::HashMap;
 
 /// Builder for constructing audit reports
@@ -101,13 +101,13 @@ impl ReportBuilder {
     fn build_context(&self) -> AuditContext {
         let mut ctx = AuditContext::new();
 
-        for (_, m) in &self.parts {
+        for m in self.parts.values() {
             ctx.add_parts(m.clone());
         }
-        for (_, m) in &self.merges {
+        for m in self.merges.values() {
             ctx.add_merges(m.clone());
         }
-        for (_, m) in &self.mutations {
+        for m in self.mutations.values() {
             ctx.add_mutations(m.clone());
         }
         ctx.set_disk(self.disk.clone());

@@ -4,11 +4,10 @@ use std::path::Path;
 
 /// Write report to JSON file
 pub fn write_report(report: &Report, path: &Path) -> Result<()> {
-    let json = serde_json::to_string_pretty(report)
-        .context("Failed to serialize report to JSON")?;
+    let json =
+        serde_json::to_string_pretty(report).context("Failed to serialize report to JSON")?;
 
-    std::fs::write(path, &json)
-        .with_context(|| format!("Failed to write report to {:?}", path))?;
+    std::fs::write(path, &json).with_context(|| format!("Failed to write report to {:?}", path))?;
 
     Ok(())
 }

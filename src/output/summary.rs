@@ -86,33 +86,27 @@ fn truncate(s: &str, max_len: usize) -> String {
     }
 }
 
-/// Format summary as string (for testing)
-pub fn format_summary(report: &Report) -> String {
-    let mut output = String::new();
-
-    output.push_str(&format!(
-        "Status: {:?}\n",
-        report.summary.status
-    ));
-    output.push_str(&format!(
-        "Findings: {}\n",
-        report.summary.findings_count
-    ));
-
-    for finding in &report.findings {
-        output.push_str(&format!(
-            "[{:?}] {}: {}\n",
-            finding.severity, finding.rule_id, finding.message
-        ));
-    }
-
-    output
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::report::{Finding, Report, Targets};
+
+    /// Format summary as string (for testing)
+    fn format_summary(report: &Report) -> String {
+        let mut output = String::new();
+
+        output.push_str(&format!("Status: {:?}\n", report.summary.status));
+        output.push_str(&format!("Findings: {}\n", report.summary.findings_count));
+
+        for finding in &report.findings {
+            output.push_str(&format!(
+                "[{:?}] {}: {}\n",
+                finding.severity, finding.rule_id, finding.message
+            ));
+        }
+
+        output
+    }
 
     fn test_report() -> Report {
         Report::new(Targets {

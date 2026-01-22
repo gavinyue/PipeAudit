@@ -1,5 +1,5 @@
-use crate::report::{Action, ActionType, Finding, Priority, Severity};
 use super::{AuditContext, Rule, RuleResult};
+use crate::report::{Action, ActionType, Finding, Priority, Severity};
 
 /// Thresholds for parts explosion detection
 const PARTS_WARNING: u64 = 300;
@@ -148,7 +148,11 @@ mod tests {
 
         let results = rule.evaluate(&ctx);
         assert!(!results[0].actions.is_empty());
-        assert!(results[0].actions[0].sql.as_ref().unwrap().contains("OPTIMIZE"));
+        assert!(results[0].actions[0]
+            .sql
+            .as_ref()
+            .unwrap()
+            .contains("OPTIMIZE"));
     }
 
     #[test]

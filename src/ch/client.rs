@@ -104,23 +104,13 @@ mod tests {
 
     #[test]
     fn test_client_creation() {
-        let client = ChClient::new(
-            "http://localhost:8123",
-            "default",
-            "password",
-            "testdb",
-        );
+        let client = ChClient::new("http://localhost:8123", "default", "password", "testdb");
         assert_eq!(client.endpoint(), "http://localhost:8123");
     }
 
     #[test]
     fn test_client_clone() {
-        let client = ChClient::new(
-            "http://localhost:8123",
-            "default",
-            "",
-            "default",
-        );
+        let client = ChClient::new("http://localhost:8123", "default", "", "default");
         let cloned = client.clone();
         assert_eq!(cloned.endpoint(), client.endpoint());
     }
