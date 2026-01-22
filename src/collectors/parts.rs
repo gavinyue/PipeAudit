@@ -15,8 +15,8 @@ struct PartsRow {
     active_parts: u64,
     total_rows: u64,
     bytes_on_disk: u64,
-    oldest_part: Option<String>,
-    newest_part: Option<String>,
+    oldest_part: String,
+    newest_part: String,
 }
 
 impl PartsCollector {
@@ -33,12 +33,12 @@ impl PartsCollector {
             SELECT
                 database,
                 table,
-                count() AS parts_count,
-                countIf(active) AS active_parts,
-                sum(rows) AS total_rows,
-                sum(bytes_on_disk) AS bytes_on_disk,
-                toString(min(modification_time)) AS oldest_part,
-                toString(max(modification_time)) AS newest_part
+                toUInt64(count()) AS parts_count,
+                toUInt64(countIf(active)) AS active_parts,
+                toUInt64(sum(rows)) AS total_rows,
+                toUInt64(sum(bytes_on_disk)) AS bytes_on_disk,
+                if(count() > 0, toString(min(modification_time)), '') AS oldest_part,
+                if(count() > 0, toString(max(modification_time)), '') AS newest_part
             FROM system.parts
             WHERE database = '{database}' AND table IN ({tables_list})
             GROUP BY database, table
@@ -67,8 +67,16 @@ impl PartsCollector {
                 active_parts: row.active_parts,
                 total_rows: row.total_rows,
                 bytes_on_disk: row.bytes_on_disk,
-                oldest_part: row.oldest_part,
-                newest_part: row.newest_part,
+                oldest_part: if row.oldest_part.is_empty() {
+                    None
+                } else {
+                    Some(row.oldest_part)
+                },
+                newest_part: if row.newest_part.is_empty() {
+                    None
+                } else {
+                    Some(row.newest_part)
+                },
             })
             .collect();
 
