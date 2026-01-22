@@ -81,9 +81,9 @@ jobs:
 
       - name: Setup test database
         run: |
-          docker exec $(docker ps -q --filter "ancestor=clickhouse/clickhouse-server:24.1") \
-            clickhouse-client --user default --password test \
-            --multiquery < tests/fixtures/init.sql
+          curl -s "http://localhost:8123/?multiquery=1" \
+            --user default:test \
+            --data-binary @tests/fixtures/init.sql
 
       - name: Run integration tests
         run: cargo test --test integration_test -- --ignored
