@@ -100,8 +100,8 @@ mod tests {
         assert!(sql.contains("system.parts"));
         assert!(sql.contains("database = 'testdb'"));
         assert!(sql.contains("'events'"));
-        assert!(sql.contains("count() AS parts_count"));
-        assert!(sql.contains("countIf(active) AS active_parts"));
+        assert!(sql.contains("toUInt64(count()) AS parts_count"));
+        assert!(sql.contains("toUInt64(countIf(active)) AS active_parts"));
     }
 
     #[test]
@@ -125,8 +125,8 @@ mod tests {
     fn test_parts_query_has_aggregations() {
         let sql = PartsCollector::build_query("db", &["t".to_string()]);
 
-        assert!(sql.contains("sum(rows) AS total_rows"));
-        assert!(sql.contains("sum(bytes_on_disk) AS bytes_on_disk"));
+        assert!(sql.contains("toUInt64(sum(rows)) AS total_rows"));
+        assert!(sql.contains("toUInt64(sum(bytes_on_disk)) AS bytes_on_disk"));
         assert!(sql.contains("min(modification_time)"));
         assert!(sql.contains("max(modification_time)"));
     }
